@@ -19,7 +19,7 @@ def hello_world():
     return jsonify(results)
 
 
-@app.route('/monsters/<monster_id>/')
+@app.route('/api/v1/monsters/<monster_id>/')
 def get_monster(monster_id):
     results = monsters_collection.find_one({"_id": ObjectId(monster_id)})
     results["id"] = str(results["_id"])
@@ -28,7 +28,7 @@ def get_monster(monster_id):
     return jsonify(results)
 
 
-@app.route('/monsters/<monster_id>/<return_format>/')
+@app.route('/api/v1/monsters/<monster_id>/<return_format>/')
 def get_monster_xml(monster_id, return_format):
     results = monsters_collection.find_one({"_id": ObjectId(monster_id)})
     if return_format == 'json':
@@ -42,7 +42,7 @@ def get_monster_xml(monster_id, return_format):
         return 'No Monster found.  Something went wrong...'
 
 
-@app.route('/monsters/')
+@app.route('/api/v1/monsters/')
 def get_monster_names():
     monster_list = []
     for monster in monsters_collection.find():
@@ -55,7 +55,7 @@ def get_monster_names():
     return jsonify({"monsters": monster_list})
 
 
-@app.route('/encounter/<name>.xml')
+@app.route('/api/v1/encounter/<name>.xml')
 def generate_encounter(name):
     battle_name = name
     bad_guys = [
