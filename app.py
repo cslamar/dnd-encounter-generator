@@ -58,7 +58,14 @@ def get_monster_names():
 @app.route('/encounter/')
 def generate_encounter():
     name = "Random Encounter 1"
-    template = render_template('encounter.xml', battle_name=name)
+    bad_guys = [
+        {"label": "Drung", "monster": "Kobold"},
+        {"label": "Krunch", "monster": "Kobold"},
+        {"label": "Slurm", "monster": "Kobold"},
+        {"label": "Mr. Wiskers", "monster": "Cat"}
+    ]
+
+    template = render_template('encounter.xml', battle_name=name, bad_guys=bad_guys)
     response = make_response(template)
     response.headers['Content-Type'] = 'application/xml'
 

@@ -2,8 +2,8 @@
 <campaign version="5" auto_indent="YES">
     <encounter>
         <name>{{ battle_name }}</name>
-        <combatant label="K1" monster="Kobold" role="enemy" />
-        <combatant label="K2" monster="Kobold" role="enemy" />
-        <combatant label="K3" monster="Kobold" role="enemy" />
+        {% for monster in bad_guys %}
+            <combatant label="{{ monster.label}}" monster="{{ monster.monster }}" role="enemy" />
+        {% endfor %}
     </encounter>
 </campaign>
