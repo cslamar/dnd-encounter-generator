@@ -55,9 +55,9 @@ def get_monster_names():
     return jsonify({"monsters": monster_list})
 
 
-@app.route('/encounter/')
-def generate_encounter():
-    name = "Random Encounter 1"
+@app.route('/encounter/<name>.xml')
+def generate_encounter(name):
+    battle_name = name
     bad_guys = [
         {"label": "Drung", "monster": "Kobold"},
         {"label": "Krunch", "monster": "Kobold"},
@@ -65,7 +65,7 @@ def generate_encounter():
         {"label": "Mr. Wiskers", "monster": "Cat"}
     ]
 
-    template = render_template('encounter.xml', battle_name=name, bad_guys=bad_guys)
+    template = render_template('encounter.xml', battle_name=battle_name, bad_guys=bad_guys)
     response = make_response(template)
     response.headers['Content-Type'] = 'application/xml'
 

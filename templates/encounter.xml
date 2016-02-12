@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <campaign version="5" auto_indent="YES">
     <encounter>
-        <name>{{ battle_name }}</name>
+        <name>{{ battle_name|title|replace('-', ' ') }}</name>
         {% for monster in bad_guys %}
             <combatant label="{{ monster.label}}" monster="{{ monster.monster }}" role="enemy" />
         {% endfor %}
