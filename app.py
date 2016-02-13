@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, make_response
+from flask import Flask, jsonify, render_template, make_response, request
 from pymongo import MongoClient
 import json
 from bson.objectid import ObjectId
@@ -56,16 +56,22 @@ def get_monster_names():
 
 
 @app.route('/api/v1/encounter/<name>.xml')
-def generate_encounter(name):
+def get_encounter(name):
     battle_name = name
-    bad_guys = [
-        {"label": "Drung", "monster": "Kobold"},
-        {"label": "Krunch", "monster": "Kobold"},
-        {"label": "Slurm", "monster": "Kobold"},
-        {"label": "Mr. Wiskers", "monster": "Cat"}
-    ]
+    bad_guys = request.query_string
 
     template = render_template('encounter.xml', battle_name=battle_name, bad_guys=bad_guys)
+    response = make_response(template)
+    response.headers['Content-Type'] = 'application/xml'
+
+    return response
+
+
+@app.route('/api/v1/generate-encounter/<name>.xml', methods=['GET', 'POST'])
+def generate_encounter(name):
+
+    bad_guys = json.loads(request.form['monsters'])
+    template = render_template('encounter.xml', battle_name=name, bad_guys=bad_guys)
     response = make_response(template)
     response.headers['Content-Type'] = 'application/xml'
 
