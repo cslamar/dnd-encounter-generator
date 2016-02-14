@@ -1,10 +1,5 @@
 backend:
-  name: backend
-  build: .
-  ports:
-   - "5000:5000"
-  volumes:
-   - .:/code
+  image: encounter-builder-backend
   links:
    - redis
    - mongo
@@ -15,7 +10,7 @@ mongo:
   ports:
     - "27017:27017"
 frontend:
-  image: frontend
+  image: encounter-builder-frontend
   ports:
     - "8080:80"
   environment:
