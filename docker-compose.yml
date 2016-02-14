@@ -1,5 +1,5 @@
 backend:
-  image: encounter-builder-backend
+  image: cslamar/encounter-builder-backend
   links:
    - redis
    - mongo
@@ -10,7 +10,7 @@ mongo:
   ports:
     - "27017:27017"
 frontend:
-  image: encounter-builder-frontend
+  image: cslamar/encounter-builder-frontend
   ports:
     - "8080:80"
   environment:
