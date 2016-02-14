@@ -14,7 +14,7 @@ def postprocessor(path, key, value):
 source_file = 'data/Bestiary-Compendium.xml'
 
 # Mongo Stuff
-client = MongoClient()
+client = MongoClient('192.168.99.100', 27017)
 db = client['dnd']
 monsters_collection = db['monsters']
 
@@ -35,5 +35,6 @@ for monster in doc['compendium']['monster']:
 
 print("Monster count: {}").format(count)
 
-# result = monsters_collection.insert_many(doc['compendium']['monster'])
+result = monsters_collection.insert_many(doc['compendium']['monster'])
+print("Done!!")
 # print(result.inserted_ids)

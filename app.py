@@ -5,9 +5,15 @@ import redis
 from bson.objectid import ObjectId
 
 # MongoDB Stuff
-client = MongoClient()
+mongo_server = 'mongo'
+mongo_port = 27017
+client = MongoClient(mongo_server, mongo_port)
 db = client['dnd']
 monsters_collection = db['monsters']
+
+# Redis Stuff
+redis_server = 'redis'
+redis_port = '6379'
 
 app = Flask(__name__)
 
@@ -58,7 +64,7 @@ def get_monster_names():
 
 @app.route('/api/v1/encounter/<name>.xml')
 def get_encounter(name):
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    r = redis.StrictRedis(host=redis_server, port=redis_port, db=0)
     print(name)
     template = r.get(name)
     print(template)
@@ -71,7 +77,7 @@ def get_encounter(name):
 @app.route('/api/v1/generate-encounter/<name>', methods=['POST', 'PUT'])
 def generate_encounter(name):
 
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    r = redis.StrictRedis(host=redis_server, port=redis_port, db=0)
 
     bad_guys = request.get_json()
     print(bad_guys['monsters'])
