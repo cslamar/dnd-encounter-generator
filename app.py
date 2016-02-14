@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, make_response, request
 from pymongo import MongoClient
 import json
+import redis
 from bson.objectid import ObjectId
 
 # MongoDB Stuff
@@ -58,24 +59,28 @@ def get_monster_names():
 @app.route('/api/v1/encounter/<name>.xml')
 def get_encounter(name):
     battle_name = name
-    bad_guys = request.query_string
-
-    template = render_template('encounter.xml', battle_name=battle_name, bad_guys=bad_guys)
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    template = r.get(name)
     response = make_response(template)
     response.headers['Content-Type'] = 'application/xml'
 
     return response
 
 
-@app.route('/api/v1/generate-encounter/<name>.xml', methods=['GET', 'POST'])
+@app.route('/api/v1/generate-encounter/<name>', methods=['POST', 'PUT'])
 def generate_encounter(name):
+
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
     bad_guys = json.loads(request.form['monsters'])
     template = render_template('encounter.xml', battle_name=name, bad_guys=bad_guys)
+    print(template)
+    r.set(name, template)
+
     response = make_response(template)
     response.headers['Content-Type'] = 'application/xml'
-
-    return response
+    # response.mimetype = 'application/xml'
+    return 'hi there'
 
 
 if __name__ == '__main__':
