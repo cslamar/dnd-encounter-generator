@@ -58,9 +58,10 @@ def get_monster_names():
 
 @app.route('/api/v1/encounter/<name>.xml')
 def get_encounter(name):
-    battle_name = name
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    print(name)
     template = r.get(name)
+    print(template)
     response = make_response(template)
     response.headers['Content-Type'] = 'application/xml'
 
@@ -72,9 +73,10 @@ def generate_encounter(name):
 
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
-    bad_guys = json.loads(request.form['monsters'])
-    template = render_template('encounter.xml', battle_name=name, bad_guys=bad_guys)
-    print(template)
+    bad_guys = request.get_json()
+    print(bad_guys['monsters'])
+    template = render_template('encounter.xml', battle_name=name, bad_guys=bad_guys['monsters'])
+    # print(template)
     r.set(name, template)
 
     response = make_response(template)
