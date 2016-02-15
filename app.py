@@ -3,16 +3,24 @@ from pymongo import MongoClient
 import json
 import redis
 from bson.objectid import ObjectId
+import os
 
 # MongoDB Stuff
-mongo_server = 'mongo'
+if 'MONGO_SERVER' in os.environ:
+    mongo_server = os.environ['MONGO_SERVER']
+else:
+    mongo_server = 'mongo'
 mongo_port = 27017
+
 client = MongoClient(mongo_server, mongo_port)
 db = client['dnd']
 monsters_collection = db['monsters']
 
 # Redis Stuff
-redis_server = 'redis'
+if 'REDIS_SERVER' in os.environ:
+    redis_server = os.environ['REDIS_SERVER']
+else:
+    redis_server = 'redis'
 redis_port = '6379'
 
 app = Flask(__name__)
