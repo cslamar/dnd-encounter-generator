@@ -34,6 +34,32 @@ def hello_world():
     return jsonify(results)
 
 
+@app.route('/api/v1/name/')
+def generate_name():
+    r = redis.StrictRedis(host=redis_server, port=redis_port, db=1)
+
+    name = ""
+
+    if 'male-first-name' in request.args:
+        name += r.srandmember('male-first-names')
+    elif 'female-first-name' in request.args:
+        name += r.srandmember('female-first-names')
+    else:
+        name += r.srandmember('male-first-names')
+
+    if 'last-name' in request.args:
+        name += " " + r.srandmember('last-names')
+
+    if 'title' in request.args:
+        name += " " + r.srandmember('generic-titles')
+    elif 'male-title' in request.args:
+        name += " " + r.srandmember('male-titles')
+    elif 'female-title' in request.args:
+        name += " " + r.srandmember('female-titles')
+
+    return name
+
+
 @app.route('/api/v1/monsters/<monster_id>/')
 def get_monster(monster_id):
     results = monsters_collection.find_one({"_id": ObjectId(monster_id)})
